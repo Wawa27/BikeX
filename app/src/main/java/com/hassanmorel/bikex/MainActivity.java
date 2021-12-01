@@ -2,7 +2,7 @@ package com.hassanmorel.bikex;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,8 @@ import com.hassanmorel.bikex.api.ApiClient;
 import com.hassanmorel.bikex.api.ApiInterface;
 import com.hassanmorel.bikex.api.models.ApiFeature;
 import com.hassanmorel.bikex.api.models.ApiRequest;
+import com.hassanmorel.bikex.models.Feature;
+import com.hassanmorel.bikex.viewmodels.FeatureViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getAllFeatures();
+        addFavoriteFeature();
+    }
+
+    private void addFavoriteFeature() {
+        FeatureViewModel featureViewModel = ViewModelProviders
+                .of(this)
+                .get(FeatureViewModel.class);
+        featureViewModel.insert(new Feature("59245426500"));
+        Log.d("BikeX", "Added !");
     }
 
     private List<ApiFeature> getAllFeatures() {
