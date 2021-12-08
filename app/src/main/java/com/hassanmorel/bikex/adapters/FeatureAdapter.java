@@ -9,10 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hassanmorel.bikex.R;
+import com.hassanmorel.bikex.models.Feature;
 import com.hassanmorel.bikex.viewmodels.FeatureViewModel;
 
+import java.util.List;
+
 public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHolder> {
-    private FeatureViewModel featureViewModel;
+    private List<Feature> features;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView featureAddressTextView;
@@ -33,8 +36,12 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
         }
     }
 
-    public FeatureAdapter(FeatureViewModel featureViewModel) {
-        this.featureViewModel = featureViewModel;
+    public FeatureAdapter() {
+
+    }
+
+    public void setFeatures(List<Feature> features) {
+        this.features = features;
     }
 
     @NonNull
@@ -47,11 +54,11 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.getFeatureAddressTextView().setText(featureViewModel.getFeature(position).getId());
+        holder.getFeatureAddressTextView().setText(features.get(position).getId());
     }
 
     @Override
     public int getItemCount() {
-        return featureViewModel.getFeaturesCount();
+        return features.size();
     }
 }

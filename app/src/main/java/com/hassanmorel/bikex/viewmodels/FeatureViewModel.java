@@ -45,8 +45,4 @@ public class FeatureViewModel extends AndroidViewModel {
     public LiveData<List<Feature>> getAllFeatures() {
         return allFeatures;
     }
-
-    public int getFeaturesCount() {
-        return Objects.requireNonNull(allFeatures.getValue()).size();
-    }
 }

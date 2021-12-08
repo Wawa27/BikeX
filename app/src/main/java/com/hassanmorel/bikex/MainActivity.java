@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hassanmorel.bikex.adapters.FeatureAdapter;
 import com.hassanmorel.bikex.api.ApiClient;
 import com.hassanmorel.bikex.api.ApiInterface;
 import com.hassanmorel.bikex.api.models.ApiFeatureLive;
@@ -26,23 +27,24 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     public MutableLiveData<ArrayList<String>> allIds;
+    private FeatureAdapter featureAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recyclid);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        final FeatureAdapter noteAdapter = new NoteAdapter();
-        recyclerView.setAdapter(noteAdapter);
-    }
-
-    private void addFavoriteFeature() {
         FeatureViewModel featureViewModel = ViewModelProviders
                 .of(this)
                 .get(FeatureViewModel.class);
-        featureViewModel.insert(new Feature("59245426500"));
+        featureAdapter = new FeatureAdapter();
+        recyclerView.setAdapter(featureAdapter);
+
+        featureViewModel.getAllFeatures().observe(this, (features) -> {
+            featureAdapter.setFeatures(features);
+        });
     }
 }

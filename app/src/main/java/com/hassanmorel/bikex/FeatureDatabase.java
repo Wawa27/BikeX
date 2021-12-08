@@ -58,6 +58,7 @@ public abstract class FeatureDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            featureDAO.insert(new Feature("CAT17","fje","kfjeh"));
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<ApiRequest> call = apiService.getFeatures();
 

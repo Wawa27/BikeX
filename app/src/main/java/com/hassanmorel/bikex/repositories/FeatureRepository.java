@@ -14,12 +14,11 @@ import java.util.List;
 
 public class FeatureRepository {
     private FeatureDAO featureDAO;
-    private LiveData<List<Feature>> allFeatures;
 
     public FeatureRepository(Application application) {
         FeatureDatabase database = FeatureDatabase.getInstance(application);
         featureDAO = database.featureDAO();
-        allFeatures = featureDAO.getAllFeatures();
+
     }
 
     public void insert(Feature feature) {
@@ -37,7 +36,7 @@ public class FeatureRepository {
     }
 
     public LiveData<List<Feature>> getAllFeatures() {
-        return allFeatures;
+        return featureDAO.getAllFeatures();
     }
 
     private static class InsertFeatureAsyncTask extends AsyncTask<Feature, Void, Void> {
