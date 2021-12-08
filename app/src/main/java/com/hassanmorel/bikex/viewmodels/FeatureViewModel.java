@@ -6,10 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.hassanmorel.bikex.FeatureRepository;
 import com.hassanmorel.bikex.models.Feature;
+import com.hassanmorel.bikex.repositories.FeatureRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FeatureViewModel extends AndroidViewModel {
     private final FeatureRepository repository;
@@ -33,7 +34,15 @@ public class FeatureViewModel extends AndroidViewModel {
         repository.deleteAllFeatures();
     }
 
+    public Feature getFeature(int position) {
+        return Objects.requireNonNull(repository.getAllFeatures().getValue()).get(position);
+    }
+
     public LiveData<List<Feature>> getAllFeatures() {
         return allFeatures;
+    }
+
+    public int getFeaturesCount() {
+        return Objects.requireNonNull(allFeatures.getValue()).size();
     }
 }

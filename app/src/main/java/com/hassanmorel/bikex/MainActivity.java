@@ -1,11 +1,11 @@
 package com.hassanmorel.bikex;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
-
-import android.os.Bundle;
-import android.util.Log;
 
 import com.hassanmorel.bikex.api.ApiClient;
 import com.hassanmorel.bikex.api.ApiInterface;
@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
         FeatureViewModel featureViewModel = ViewModelProviders
                 .of(this)
                 .get(FeatureViewModel.class);
-        //featureViewModel.insert(new Feature("59245426500"));
-
+        featureViewModel.insert(new Feature("59245426500"));
     }
 
     private List<ApiFeature> getAllFeatures() {
@@ -64,13 +63,11 @@ public class MainActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
-
-
         return features;
     }
-    public void getAllData(){
-        for (String id:allIds
-             ) {
+
+    public void getAllData() {
+        for (String id : allIds) {
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<ApiFeatureLive> call = apiService.getData(id);
             call.enqueue(new Callback<ApiFeatureLive>() {
@@ -79,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("Data", "Response");
                     assert response.body() != null;
 
-                    Log.d("COUNT", ""+response.body().getData().getDayCount());
+                    Log.d("COUNT", "" + response.body().getData().getDayCount());
                 }
 
                 @Override

@@ -1,10 +1,12 @@
-package com.hassanmorel.bikex;
+package com.hassanmorel.bikex.repositories;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
+import com.hassanmorel.bikex.FeatureDatabase;
 import com.hassanmorel.bikex.daos.FeatureDAO;
 import com.hassanmorel.bikex.models.Feature;
 
@@ -19,7 +21,6 @@ public class FeatureRepository {
         featureDAO = database.featureDAO();
         allFeatures = featureDAO.getAllFeatures();
     }
-
 
     public void insert(Feature feature) {
         new InsertFeatureAsyncTask(featureDAO).execute(feature);
@@ -36,7 +37,6 @@ public class FeatureRepository {
     public LiveData<List<Feature>> getAllFeatures() {
         return allFeatures;
     }
-
 
     private static class InsertFeatureAsyncTask extends AsyncTask<Feature, Void, Void> {
         private final FeatureDAO featureDAO;
