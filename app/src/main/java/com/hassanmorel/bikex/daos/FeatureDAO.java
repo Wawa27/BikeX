@@ -6,7 +6,9 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
+import com.hassanmorel.bikex.api.models.ApiRequest;
 import com.hassanmorel.bikex.models.Feature;
 
 import java.util.List;
@@ -20,9 +22,12 @@ public interface FeatureDAO {
     @Delete
     void delete(Feature feature);
 
-    @Query("DELETE FROM favorite_features")
+    @Update
+    void update(Feature feature);
+
+    @Query("DELETE FROM features")
     void deleteAllFeatures();
 
-    @Query("SELECT * FROM favorite_features")
+    @Query("SELECT * FROM features")
     LiveData<List<Feature>> getAllFeatures();
 }

@@ -30,6 +30,10 @@ public class FeatureViewModel extends AndroidViewModel {
         repository.delete(feature);
     }
 
+    public void update(Feature feature){
+        repository.update(feature);
+    }
+
     public void deleteAllFeatures() {
         repository.deleteAllFeatures();
     }

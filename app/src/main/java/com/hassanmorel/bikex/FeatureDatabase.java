@@ -2,6 +2,7 @@ package com.hassanmorel.bikex;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -9,8 +10,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.hassanmorel.bikex.api.ApiClient;
+import com.hassanmorel.bikex.api.ApiInterface;
+import com.hassanmorel.bikex.api.models.ApiRequest;
 import com.hassanmorel.bikex.daos.FeatureDAO;
 import com.hassanmorel.bikex.models.Feature;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 @Database(entities = {Feature.class}, version = 1)
 public abstract class FeatureDatabase extends RoomDatabase {
@@ -25,7 +32,7 @@ public abstract class FeatureDatabase extends RoomDatabase {
     // - fallbackToDestructiveMigration permet de créer/recréer la base si ce n'est pas la bonne version
     public static synchronized FeatureDatabase getInstance(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(), FeatureDatabase.class, "note_database")
+            instance = Room.databaseBuilder(context.getApplicationContext(), FeatureDatabase.class, "features")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
                     .build();
@@ -51,9 +58,23 @@ public abstract class FeatureDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //featureDAO.insert(new Feature("Note 1"));
-            //featureDAO.insert(new Feature("Note 2"));
-            //featureDAO.insert(new Feature("Note 3"));
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            Call<ApiRequest> call = apiService.getFeatures();
+
+            call.enqueue(new retrofit2.Callback<ApiRequest>() {
+                @Override
+                public void onResponse(@NonNull Call<ApiRequest> call, @NonNull Response<ApiRequest> response) {
+                    Log.d("BikeX", "Response");
+                    assert response.body() != null;
+
+                    response.body().getFeatures().forEach(f -> featureDAO.insert(f.toFeature()));
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ApiRequest> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                }
+            });
             return null;
         }
     }

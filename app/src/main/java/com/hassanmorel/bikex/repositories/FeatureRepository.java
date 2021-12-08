@@ -26,6 +26,8 @@ public class FeatureRepository {
         new InsertFeatureAsyncTask(featureDAO).execute(feature);
     }
 
+    public void update(Feature feature){ new UpdateFeatureAsyncTask(featureDAO).execute(feature); }
+
     public void delete(Feature feature) {
         new DeleteFeatureAsyncTask(featureDAO).execute(feature);
     }
@@ -76,6 +78,20 @@ public class FeatureRepository {
         @Override
         protected Void doInBackground(Void... voids) {
             featureDao.deleteAllFeatures();
+            return null;
+        }
+    }
+
+    private static class UpdateFeatureAsyncTask extends AsyncTask<Feature, Void, Void>{
+        private FeatureDAO featureDAO;
+
+        private UpdateFeatureAsyncTask(FeatureDAO featureDAO) {
+            this.featureDAO = featureDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Feature... notes) {
+            featureDAO.update(notes[0]);
             return null;
         }
     }
