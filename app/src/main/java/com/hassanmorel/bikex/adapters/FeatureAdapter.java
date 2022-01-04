@@ -41,7 +41,9 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
     }
 
     public void setFeatures(List<Feature> features) {
+
         this.features = features;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -59,6 +61,6 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return features.size();
+        return (features!=null)?features.size():0;
     }
 }

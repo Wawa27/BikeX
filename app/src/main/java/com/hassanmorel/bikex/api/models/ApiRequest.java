@@ -21,7 +21,7 @@ public class ApiRequest {
         private ApiDeviceProperties properties;
 
         public Feature toFeature(){
-            return new Feature(id, properties.getEnglishRoadName(), properties.getFirstPicture());
+            return new Feature(id.split("\\.")[1], properties.getEnglishRoadName(), properties.getFirstPicture());
         }
 
         public ApiFeature() {

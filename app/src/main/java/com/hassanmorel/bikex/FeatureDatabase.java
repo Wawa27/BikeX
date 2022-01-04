@@ -45,6 +45,7 @@ public abstract class FeatureDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+
             new PopulateDbAsyncTask(instance).execute();
         }
     };
@@ -58,14 +59,13 @@ public abstract class FeatureDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            featureDAO.insert(new Feature("CAT17","fje","kfjeh"));
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<ApiRequest> call = apiService.getFeatures();
 
             call.enqueue(new retrofit2.Callback<ApiRequest>() {
                 @Override
                 public void onResponse(@NonNull Call<ApiRequest> call, @NonNull Response<ApiRequest> response) {
-                    Log.d("BikeX", "Response");
+
                     assert response.body() != null;
 
                     response.body().getFeatures().forEach(f -> featureDAO.insert(f.toFeature()));

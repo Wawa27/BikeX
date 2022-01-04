@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity {
     public MutableLiveData<ArrayList<String>> allIds;
@@ -37,14 +38,33 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
-        FeatureViewModel featureViewModel = ViewModelProviders
-                .of(this)
-                .get(FeatureViewModel.class);
-        featureAdapter = new FeatureAdapter();
-        recyclerView.setAdapter(featureAdapter);
+        FeatureViewModel featureViewModel = ViewModelProviders.of(this).get(FeatureViewModel.class);
 
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<ApiRequest> call = apiService.getFeatures();
+
+        call.enqueue(new retrofit2.Callback<ApiRequest>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiRequest> call, @NonNull Response<ApiRequest> response) {
+
+                assert response.body() != null;
+
+                response.body().getFeatures().forEach(f -> featureViewModel.insert(f.toFeature()));
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ApiRequest> call, @NonNull Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+        featureAdapter = new FeatureAdapter();
         featureViewModel.getAllFeatures().observe(this, (features) -> {
             featureAdapter.setFeatures(features);
         });
+        recyclerView.setAdapter(featureAdapter);
+
+
+
     }
 }
