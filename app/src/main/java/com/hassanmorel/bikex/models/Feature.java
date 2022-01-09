@@ -16,11 +16,14 @@ public class Feature {
 
     private final String image;
 
+    private final boolean isFavorite;
+
 
     public Feature(@NonNull String id, String roadEn, String image) {
         this.id = id;
         this.roadEn = roadEn;
         this.image = image;
+        this.isFavorite = false;
     }
 
     @NonNull
@@ -35,4 +38,6 @@ public class Feature {
     public String getImage() {
         return image;
     }
+
+    public boolean isFavorite() { return isFavorite; }
 }
