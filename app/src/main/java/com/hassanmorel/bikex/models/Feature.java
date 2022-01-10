@@ -16,14 +16,16 @@ public class Feature {
 
     private final String image;
 
-    private final boolean isFavorite;
 
 
     public Feature(@NonNull String id, String roadEn, String image) {
         this.id = id;
         this.roadEn = roadEn;
-        this.image = image;
-        this.isFavorite = false;
+        if (image.equals("https://data.mobility.brussels/media/-")) {
+            this.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1200px-Question_mark_%28black%29.svg.png";
+        } else {
+            this.image = image;
+        }
     }
 
     @NonNull
@@ -38,6 +40,4 @@ public class Feature {
     public String getImage() {
         return image;
     }
-
-    public boolean isFavorite() { return isFavorite; }
 }

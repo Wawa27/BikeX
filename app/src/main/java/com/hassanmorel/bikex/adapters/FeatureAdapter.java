@@ -106,7 +106,10 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
         }
 
         protected void onPostExecute(Bitmap result) {
+            bmImage.setMaxHeight(500);
+            bmImage.setMaxWidth(500);
             bmImage.setImageBitmap(result);
+
         }
     }
 
