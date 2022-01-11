@@ -29,16 +29,13 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
     private List<Feature> features;
     private boolean isList;
 
-    public void setList(boolean list) {
-        isList = list;
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView featureAddressTextView;
         private final ImageView featureImage;
 
 
-        public ViewHolder(View view,boolean isList) {
+        public ViewHolder(View view) {
             super(view);
             featureAddressTextView = (TextView) view.findViewById(R.id.feature_address_text);
             featureImage = (ImageView) view.findViewById(R.id.imageView);
@@ -54,7 +51,7 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
     }
 
     public FeatureAdapter() {
-
+        isList = true;
     }
 
     public void setFeatures(List<Feature> features) {
@@ -67,14 +64,16 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate((isList)?R.layout.fragment_grid_fragment:R.layout.feature_preview_fragment, parent, false);
-        return new ViewHolder(view,true);
+                .inflate((!isList)?R.layout.fragment_grid_fragment:R.layout.feature_preview_fragment, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         holder.getFeatureAddressTextView().setText(features.get(position).getId());
         new DownloadImageTask((ImageView) holder.getFeatureImageView()).execute(features.get(position).getImage());
+
     }
 
     @Override
@@ -109,6 +108,10 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
             bmImage.setImageBitmap(result);
 
         }
+    }
+
+    public void setList(boolean list) {
+        isList = list;
     }
 
 }

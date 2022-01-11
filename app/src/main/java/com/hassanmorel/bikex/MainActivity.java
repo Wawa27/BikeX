@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_list);
         RecyclerView recyclerView = findViewById(R.id.recyclid);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         isList = true;
         featureAdapter = new FeatureAdapter();
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                featureAdapter.setList(isList);
+
                 if(isList) {
                     fab.setImageResource(R.drawable.list_icon_foreground);
                     recyclerView.setLayoutManager(new GridLayoutManager(c,2));
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     recyclerView.setLayoutManager(new LinearLayoutManager(c));
                 }
                 isList = !isList;
+                featureAdapter.setList(isList);
             }});
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
