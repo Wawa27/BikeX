@@ -24,30 +24,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import retrofit2.http.Url;
-
 
 public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHolder> {
     private List<Feature> features;
+    private boolean isList;
+
+    public void setList(boolean list) {
+        isList = list;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView featureAddressTextView;
-        private final TextView featureDayCountTextView;
         private final ImageView featureImage;
 
-        public ViewHolder(View view) {
+
+        public ViewHolder(View view,boolean isList) {
             super(view);
             featureAddressTextView = (TextView) view.findViewById(R.id.feature_address_text);
-            featureDayCountTextView = (TextView) view.findViewById(R.id.feature_day_count_text);
             featureImage = (ImageView) view.findViewById(R.id.imageView);
         }
 
         public TextView getFeatureAddressTextView() {
             return featureAddressTextView;
-        }
-
-        public TextView getFeatureDayCountTextView() {
-            return featureDayCountTextView;
         }
 
         public ImageView getFeatureImageView() {
@@ -69,8 +67,8 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.feature_preview_fragment, parent, false);
-        return new ViewHolder(view);
+                .inflate((isList)?R.layout.fragment_grid_fragment:R.layout.feature_preview_fragment, parent, false);
+        return new ViewHolder(view,true);
     }
 
     @Override
