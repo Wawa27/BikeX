@@ -1,12 +1,9 @@
 package com.hassanmorel.bikex;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,14 +16,10 @@ import com.hassanmorel.bikex.api.ApiInterface;
 import com.hassanmorel.bikex.api.models.ApiRequest;
 import com.hassanmorel.bikex.viewmodels.FeatureViewModel;
 
-import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Response;
 
-
 public class MainActivity extends AppCompatActivity {
-    public MutableLiveData<ArrayList<String>> allIds;
     private FeatureAdapter featureAdapter;
     private boolean isList;
 
@@ -45,22 +38,16 @@ public class MainActivity extends AppCompatActivity {
         FeatureViewModel featureViewModel = ViewModelProviders.of(this).get(FeatureViewModel.class);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        Context c = this;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(isList) {
-                    fab.setImageResource(R.drawable.list_icon_foreground);
-                    recyclerView.setLayoutManager(new GridLayoutManager(c,2));
-                }
-                else{
-                    fab.setImageResource(R.drawable.grid_icon);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(c));
-                }
-                isList = !isList;
-                featureAdapter.setList(isList);
-            }});
+        fab.setOnClickListener(view -> {
+            if (isList) {
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            } else {
+                fab.setImageResource(R.drawable.grid_icon);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            }
+            isList = !isList;
+            featureAdapter.setList(isList);
+        });
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<ApiRequest> call = apiService.getFeatures();
@@ -68,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new retrofit2.Callback<ApiRequest>() {
             @Override
             public void onResponse(@NonNull Call<ApiRequest> call, @NonNull Response<ApiRequest> response) {
-
                 assert response.body() != null;
-
                 response.body().getFeatures().forEach(f -> featureViewModel.insert(f.toFeature()));
             }
 
@@ -80,13 +65,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         featureViewModel.getAllFeatures().observe(this, (features) -> {
             featureAdapter.setFeatures(features);
         });
         recyclerView.setAdapter(featureAdapter);
-
-
-
     }
 }

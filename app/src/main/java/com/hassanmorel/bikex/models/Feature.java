@@ -16,8 +16,6 @@ public class Feature {
 
     private final String image;
 
-
-
     public Feature(@NonNull String id, String roadEn, String image) {
         this.id = id;
         this.roadEn = roadEn;
