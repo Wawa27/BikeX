@@ -1,6 +1,7 @@
 package com.hassanmorel.bikex;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             if (isList) {
+                fab.setImageResource(R.drawable.list_icon_foreground);
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
             } else {
                 fab.setImageResource(R.drawable.grid_icon);
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
             }
             isList = !isList;
             featureAdapter.setList(isList);
+        });
+
+        ImageButton imbut = findViewById(R.id.buttonFav);
+        imbut.setOnClickListener(view -> {
+
         });
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
