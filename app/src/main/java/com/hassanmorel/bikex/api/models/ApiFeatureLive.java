@@ -2,6 +2,8 @@ package com.hassanmorel.bikex.api.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.hassanmorel.bikex.models.Feature;
+import com.hassanmorel.bikex.models.FeatureLive;
 
 import java.util.List;
 
@@ -39,9 +41,15 @@ public class ApiFeatureLive {
             return yearCount;
         }
 
+        public FeatureLive toFeatureLive(){
+            return new FeatureLive(getDayCount(), getHourCount(), getYearCount());
+        }
+
     };
 
     public featureLiveData getData() {
         return data;
     }
+
+
 }

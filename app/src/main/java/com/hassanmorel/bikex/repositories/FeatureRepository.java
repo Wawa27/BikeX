@@ -6,14 +6,16 @@ import android.os.AsyncTask;
 import com.hassanmorel.bikex.FeatureDatabase;
 import com.hassanmorel.bikex.api.ApiClient;
 import com.hassanmorel.bikex.api.ApiInterface;
+import com.hassanmorel.bikex.api.models.ApiFeatureLive;
 import com.hassanmorel.bikex.api.models.ApiRequest;
 import com.hassanmorel.bikex.daos.FeatureDAO;
 import com.hassanmorel.bikex.models.Feature;
+import com.hassanmorel.bikex.models.FeatureLive;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FeatureRepository {
     private FeatureDAO featureDAO;
@@ -42,12 +44,21 @@ public class FeatureRepository {
         new DeleteAllFeaturesAsyncTask(featureDAO).execute();
     }
 
-    public Single<List<Feature>> getFeatures() {
+    public Flowable<List<Feature>> getFeatures() {
         return apiService.getFeatures()
                 .map(ApiRequest::getFeatures)
                 .flatMapIterable(x -> x)
                 .map(ApiRequest.ApiFeature::toFeature)
-                .toSortedList();
+                .toList()
+                .toFlowable()
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Flowable<FeatureLive> getDetails(String id){
+        return apiService.getData(id)
+                .map(ApiFeatureLive::getData)
+                .map(ApiFeatureLive.featureLiveData::toFeatureLive)
+                .subscribeOn(Schedulers.io());
     }
 
     private static class InsertFeatureAsyncTask extends AsyncTask<Feature, Void, Void> {

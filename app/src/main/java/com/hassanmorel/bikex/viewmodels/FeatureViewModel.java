@@ -40,6 +40,6 @@ public class FeatureViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Feature>> getAllFeatures() {
-        return LiveDataReactiveStreams.fromPublisher(repository.getFeatures().toFlowable());
+        return LiveDataReactiveStreams.fromPublisher(repository.getFeatures());
     }
 }

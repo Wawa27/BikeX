@@ -8,11 +8,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveDataReactiveStreams;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.hassanmorel.bikex.api.ApiClient;
 import com.hassanmorel.bikex.api.ApiInterface;
 import com.hassanmorel.bikex.api.models.ApiFeatureLive;
+import com.hassanmorel.bikex.viewmodels.FeatureLiveViewModel;
+import com.hassanmorel.bikex.viewmodels.FeatureViewModel;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -52,12 +56,16 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 .centerCrop()
                 .into(imgView);
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        apiService.getData(id).subscribe(apiFeatureLive -> {
-            txtDay.setText("Day count : " + apiFeatureLive.getData().getDayCount());
-            txtHour.setText("Hour count : " + apiFeatureLive.getData().getHourCount());
-            txtYear.setText("Year count : " + apiFeatureLive.getData().getYearCount());
-        });
+        FeatureLiveViewModel featureLiveViewModel = ViewModelProviders.of(this).get(FeatureLiveViewModel.class);
+
+
+            featureLiveViewModel.getFeatureLive(id).observe(this, featureLive -> {
+                txtDay.setText("Day count : " + featureLive.getDayCount());
+                txtHour.setText("Hour count : " + featureLive.getHourCount());
+                txtYear.setText("Year count : " + featureLive.getYearCount());
+            });
+
+
     }
 
     @Override
