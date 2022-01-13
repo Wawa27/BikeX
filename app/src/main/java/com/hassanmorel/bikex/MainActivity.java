@@ -51,11 +51,6 @@ public class MainActivity extends AppCompatActivity {
             featureAdapter.setList(isList);
         });
 
-        ImageButton imbut = findViewById(R.id.buttonFav);
-        imbut.setOnClickListener(view -> {
-
-        });
-
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<ApiRequest> call = apiService.getFeatures();
 

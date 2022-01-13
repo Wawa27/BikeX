@@ -2,11 +2,12 @@ package com.hassanmorel.bikex;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     TextView txtId;
     TextView addressView;
 
@@ -31,5 +32,10 @@ public class DetailActivity extends AppCompatActivity {
         txtId.setText(id);
         String roadEn = intent.getStringExtra("address");
         addressView.setText(roadEn);
+    }
+
+    @Override
+    public void onClick(View view) {
+        finish();
     }
 }
