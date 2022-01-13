@@ -72,6 +72,7 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
             Intent intent = new Intent(view.getContext(), DetailActivity.class);
             intent.putExtra("id", imageId);
             intent.putExtra("address", features.get(position).getRoadEn());
+            intent.putExtra("img" , features.get(position).getImage());
             view.getContext().startActivity(intent);
         });
     }
