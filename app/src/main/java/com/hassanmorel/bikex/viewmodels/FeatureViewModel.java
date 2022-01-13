@@ -40,9 +40,6 @@ public class FeatureViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Feature>> getAllFeatures() {
-        repository.getFeatures().subscribe(apiFeatures -> {
-            System.out.println("apiFeatures = " + apiFeatures);
-        });
-       return null;
+        return LiveDataReactiveStreams.fromPublisher(repository.getFeatures().toFlowable());
     }
 }

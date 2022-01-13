@@ -12,6 +12,7 @@ import com.hassanmorel.bikex.models.Feature;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class FeatureRepository {
@@ -41,10 +42,12 @@ public class FeatureRepository {
         new DeleteAllFeaturesAsyncTask(featureDAO).execute();
     }
 
-    public Single<List<ApiRequest.ApiFeature>> getFeatures() {
-        return apiService
-                .getFeatures()
-                .flatMapIterable(x -> x);
+    public Single<List<Feature>> getFeatures() {
+        return apiService.getFeatures()
+                .map(ApiRequest::getFeatures)
+                .flatMapIterable(x -> x)
+                .map(ApiRequest.ApiFeature::toFeature)
+                .toSortedList();
     }
 
     private static class InsertFeatureAsyncTask extends AsyncTask<Feature, Void, Void> {

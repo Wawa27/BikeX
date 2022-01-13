@@ -53,21 +53,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 .into(imgView);
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ApiFeatureLive> call = apiService.getData(id);
-
-        call.enqueue(new retrofit2.Callback<ApiFeatureLive>() {
-            @Override
-            public void onResponse(@NonNull Call<ApiFeatureLive> call, @NonNull Response<ApiFeatureLive> response) {
-                assert response.body() != null;
-                txtDay.setText("Day count : "+response.body().getData().getDayCount());
-                txtHour.setText("Hour count : "+response.body().getData().getHourCount());
-                txtYear.setText("Year count : "+response.body().getData().getYearCount());
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ApiFeatureLive> call, @NonNull Throwable t) {
-                t.printStackTrace();
-            }
+        apiService.getData(id).subscribe(apiFeatureLive -> {
+            txtDay.setText("Day count : " + apiFeatureLive.getData().getDayCount());
+            txtHour.setText("Hour count : " + apiFeatureLive.getData().getHourCount());
+            txtYear.setText("Year count : " + apiFeatureLive.getData().getYearCount());
         });
     }
 
