@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 
 import com.hassanmorel.bikex.models.Feature;
 import com.hassanmorel.bikex.repositories.FeatureRepository;
@@ -12,14 +13,14 @@ import com.hassanmorel.bikex.repositories.FeatureRepository;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.rxjava3.core.BackpressureStrategy;
+
 public class FeatureViewModel extends AndroidViewModel {
     private final FeatureRepository repository;
-    private final LiveData<List<Feature>> allFeatures;
 
     public FeatureViewModel(@NonNull Application application) {
         super(application);
         repository = new FeatureRepository(application);
-        allFeatures = repository.getAllFeatures();
     }
 
     public void insert(Feature feature) {
@@ -30,7 +31,7 @@ public class FeatureViewModel extends AndroidViewModel {
         repository.delete(feature);
     }
 
-    public void update(Feature feature){
+    public void update(Feature feature) {
         repository.update(feature);
     }
 
@@ -38,11 +39,10 @@ public class FeatureViewModel extends AndroidViewModel {
         repository.deleteAllFeatures();
     }
 
-    public Feature getFeature(int position) {
-        return Objects.requireNonNull(repository.getAllFeatures().getValue()).get(position);
-    }
-
     public LiveData<List<Feature>> getAllFeatures() {
-        return allFeatures;
+        repository.getFeatures().subscribe(apiFeatures -> {
+            System.out.println("apiFeatures = " + apiFeatures);
+        });
+       return null;
     }
 }

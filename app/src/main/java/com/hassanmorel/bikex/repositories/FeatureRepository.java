@@ -3,29 +3,35 @@ package com.hassanmorel.bikex.repositories;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.hassanmorel.bikex.FeatureDatabase;
+import com.hassanmorel.bikex.api.ApiClient;
+import com.hassanmorel.bikex.api.ApiInterface;
+import com.hassanmorel.bikex.api.models.ApiRequest;
 import com.hassanmorel.bikex.daos.FeatureDAO;
 import com.hassanmorel.bikex.models.Feature;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Single;
+
 public class FeatureRepository {
     private FeatureDAO featureDAO;
+    private ApiInterface apiService;
 
     public FeatureRepository(Application application) {
         FeatureDatabase database = FeatureDatabase.getInstance(application);
         featureDAO = database.featureDAO();
 
+        apiService = ApiClient.getClient().create(ApiInterface.class);
     }
 
     public void insert(Feature feature) {
         new InsertFeatureAsyncTask(featureDAO).execute(feature);
     }
 
-    public void update(Feature feature){ new UpdateFeatureAsyncTask(featureDAO).execute(feature); }
+    public void update(Feature feature) {
+        new UpdateFeatureAsyncTask(featureDAO).execute(feature);
+    }
 
     public void delete(Feature feature) {
         new DeleteFeatureAsyncTask(featureDAO).execute(feature);
@@ -35,8 +41,10 @@ public class FeatureRepository {
         new DeleteAllFeaturesAsyncTask(featureDAO).execute();
     }
 
-    public LiveData<List<Feature>> getAllFeatures() {
-        return featureDAO.getAllFeatures();
+    public Single<List<ApiRequest.ApiFeature>> getFeatures() {
+        return apiService
+                .getFeatures()
+                .flatMapIterable(x -> x);
     }
 
     private static class InsertFeatureAsyncTask extends AsyncTask<Feature, Void, Void> {
@@ -81,7 +89,7 @@ public class FeatureRepository {
         }
     }
 
-    private static class UpdateFeatureAsyncTask extends AsyncTask<Feature, Void, Void>{
+    private static class UpdateFeatureAsyncTask extends AsyncTask<Feature, Void, Void> {
         private FeatureDAO featureDAO;
 
         private UpdateFeatureAsyncTask(FeatureDAO featureDAO) {

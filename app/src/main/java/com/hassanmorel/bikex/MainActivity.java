@@ -51,22 +51,6 @@ public class MainActivity extends AppCompatActivity {
             featureAdapter.setList(isList);
         });
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ApiRequest> call = apiService.getFeatures();
-
-        call.enqueue(new retrofit2.Callback<ApiRequest>() {
-            @Override
-            public void onResponse(@NonNull Call<ApiRequest> call, @NonNull Response<ApiRequest> response) {
-                assert response.body() != null;
-                response.body().getFeatures().forEach(f -> featureViewModel.insert(f.toFeature()));
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ApiRequest> call, @NonNull Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
         featureViewModel.getAllFeatures().observe(this, (features) -> {
             featureAdapter.setFeatures(features);
         });
