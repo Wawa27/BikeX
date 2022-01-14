@@ -3,6 +3,8 @@ package com.hassanmorel.bikex.repositories;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import com.hassanmorel.bikex.FeatureDatabase;
 import com.hassanmorel.bikex.api.ApiClient;
 import com.hassanmorel.bikex.api.ApiInterface;
@@ -24,7 +26,6 @@ public class FeatureRepository {
     public FeatureRepository(Application application) {
         FeatureDatabase database = FeatureDatabase.getInstance(application);
         featureDAO = database.featureDAO();
-
         apiService = ApiClient.getClient().create(ApiInterface.class);
     }
 
@@ -52,6 +53,10 @@ public class FeatureRepository {
                 .toList()
                 .toFlowable()
                 .subscribeOn(Schedulers.io());
+    }
+
+    public LiveData<List<Feature>> getTkt(){
+        return featureDAO.getAllFeatures();
     }
 
     public Flowable<FeatureLive> getDetails(String id){

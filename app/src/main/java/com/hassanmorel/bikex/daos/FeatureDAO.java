@@ -29,6 +29,6 @@ public interface FeatureDAO {
     @Query("DELETE FROM features")
     void deleteAllFeatures();
 
-    @Query("SELECT * FROM features")
+    @Query("SELECT * FROM features ORDER BY isFavorite DESC")
     LiveData<List<Feature>> getAllFeatures();
 }

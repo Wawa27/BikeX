@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,21 +15,25 @@ import com.bumptech.glide.Glide;
 import com.hassanmorel.bikex.DetailActivity;
 import com.hassanmorel.bikex.R;
 import com.hassanmorel.bikex.models.Feature;
+import com.hassanmorel.bikex.viewmodels.FeatureViewModel;
 
 import java.util.List;
 
 public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHolder> {
     private List<Feature> features;
     private boolean isList;
+    private FeatureViewModel fvm;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView featureAddressTextView;
         private final ImageView featureImage;
+        private final ImageButton butFav;
 
         public ViewHolder(View view) {
             super(view);
             featureAddressTextView = view.findViewById(R.id.feature_address_text);
             featureImage = view.findViewById(R.id.imageView);
+            butFav = view.findViewById(R.id.buttonFav);
         }
 
         public TextView getFeatureAddressTextView() {
@@ -40,7 +45,8 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
         }
     }
 
-    public FeatureAdapter() {
+    public FeatureAdapter(FeatureViewModel fvm) {
+        this.fvm = fvm;
         isList = true;
     }
 
@@ -74,6 +80,18 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
             intent.putExtra("address", features.get(position).getRoadEn());
             intent.putExtra("img" , features.get(position).getImage());
             view.getContext().startActivity(intent);
+        });
+        holder.butFav.setOnClickListener(view -> {
+            Feature f = features.get(position);
+            if(f.isFavorite()){
+                holder.butFav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                f.changeFavoritStatus();
+                fvm.update(f);
+            }else{
+                holder.butFav.setImageResource(R.drawable.ic_yes_fav_24);
+                f.changeFavoritStatus();
+                fvm.update(f);
+            }
         });
     }
 

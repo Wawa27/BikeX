@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.hassanmorel.bikex.daos.FeatureDAO;
 import com.hassanmorel.bikex.models.Feature;
 
-@Database(entities = {Feature.class}, version = 1)
+@Database(entities = {Feature.class}, version = 2)
 public abstract class FeatureDatabase extends RoomDatabase {
     private static FeatureDatabase instance;
 

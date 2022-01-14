@@ -16,6 +16,8 @@ public class Feature {
 
     private final String image;
 
+    private boolean isFavorite;
+
     public Feature(@NonNull String id, String roadEn, String image) {
         this.id = id;
         this.roadEn = roadEn;
@@ -24,6 +26,7 @@ public class Feature {
         } else {
             this.image = image;
         }
+        this.isFavorite = false;
     }
 
     @NonNull
@@ -37,5 +40,17 @@ public class Feature {
 
     public String getImage() {
         return image;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void changeFavoritStatus() {
+        isFavorite = !isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

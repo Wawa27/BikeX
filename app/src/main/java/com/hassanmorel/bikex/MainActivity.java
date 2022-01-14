@@ -17,6 +17,8 @@ import com.hassanmorel.bikex.api.ApiInterface;
 import com.hassanmorel.bikex.api.models.ApiRequest;
 import com.hassanmorel.bikex.viewmodels.FeatureViewModel;
 
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -32,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        isList = true;
-        featureAdapter = new FeatureAdapter();
-        featureAdapter.setList(isList);
+
 
         FeatureViewModel featureViewModel = ViewModelProviders.of(this).get(FeatureViewModel.class);
+
+        isList = true;
+        featureAdapter = new FeatureAdapter(featureViewModel);
+        featureAdapter.setList(isList);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -54,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         featureViewModel.getAllFeatures().observe(this, (features) -> {
             featureAdapter.setFeatures(features);
         });
+
+
         recyclerView.setAdapter(featureAdapter);
     }
 }
