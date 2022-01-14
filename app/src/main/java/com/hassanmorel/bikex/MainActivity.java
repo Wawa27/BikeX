@@ -6,6 +6,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
             if (isList) {
                 fab.setImageResource(R.drawable.list_icon_foreground);
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+                recyclerView.removeItemDecorationAt(0);
             } else {
                 fab.setImageResource(R.drawable.grid_icon);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
             }
             isList = !isList;
             featureAdapter.setList(isList);
@@ -74,5 +77,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         recyclerView.setAdapter(featureAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 }
