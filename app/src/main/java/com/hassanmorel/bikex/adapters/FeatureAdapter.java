@@ -65,6 +65,7 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Feature feature = features.get(position);
         String imageUrl = features.get(position).getImage();
         String imageId = features.get(position).getId();
 
@@ -81,17 +82,13 @@ public class FeatureAdapter extends RecyclerView.Adapter<FeatureAdapter.ViewHold
             intent.putExtra("img" , features.get(position).getImage());
             view.getContext().startActivity(intent);
         });
+        if (feature.isFavorite()) {
+            holder.butFav.setImageResource(R.drawable.ic_yes_fav_24);
+        }
         holder.butFav.setOnClickListener(view -> {
             Feature f = features.get(position);
-            if(f.isFavorite()){
-                holder.butFav.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                f.changeFavoritStatus();
-                fvm.update(f);
-            }else{
-                holder.butFav.setImageResource(R.drawable.ic_yes_fav_24);
-                f.changeFavoritStatus();
-                fvm.update(f);
-            }
+            f.changeFavoritStatus();
+            fvm.update(f);
         });
     }
 

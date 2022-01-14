@@ -45,16 +45,6 @@ public class FeatureRepository {
         new DeleteAllFeaturesAsyncTask(featureDAO).execute();
     }
 
-    public Flowable<List<Feature>> getFeatures() {
-        return apiService.getFeatures()
-                .map(ApiRequest::getFeatures)
-                .flatMapIterable(x -> x)
-                .map(ApiRequest.ApiFeature::toFeature)
-                .toList()
-                .toFlowable()
-                .subscribeOn(Schedulers.io());
-    }
-
     public LiveData<List<Feature>> getTkt(){
         return featureDAO.getAllFeatures();
     }

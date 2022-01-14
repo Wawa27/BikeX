@@ -15,10 +15,14 @@ import com.hassanmorel.bikex.adapters.FeatureAdapter;
 import com.hassanmorel.bikex.api.ApiClient;
 import com.hassanmorel.bikex.api.ApiInterface;
 import com.hassanmorel.bikex.api.models.ApiRequest;
+import com.hassanmorel.bikex.models.Feature;
 import com.hassanmorel.bikex.viewmodels.FeatureViewModel;
 
-import java.util.Objects;
+import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -33,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclid);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
 
         FeatureViewModel featureViewModel = ViewModelProviders.of(this).get(FeatureViewModel.class);
 
@@ -55,10 +57,21 @@ public class MainActivity extends AppCompatActivity {
             featureAdapter.setList(isList);
         });
 
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        apiService
+                .getFeatures()
+                .toObservable()
+                .flatMapIterable(ApiRequest::getFeatures)
+                .map(ApiRequest.ApiFeature::toFeature)
+                .subscribeOn(Schedulers.io())
+                .subscribe(feature -> {
+                    System.out.println("feature = " + feature);
+                    featureViewModel.insert(feature);
+                });
+
         featureViewModel.getAllFeatures().observe(this, (features) -> {
             featureAdapter.setFeatures(features);
         });
-
 
         recyclerView.setAdapter(featureAdapter);
     }

@@ -17,7 +17,7 @@ import java.util.List;
 @Dao
 public interface FeatureDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Feature feature);
 
     @Delete
